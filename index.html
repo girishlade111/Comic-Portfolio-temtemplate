@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
     <style>
+        /* ==========================================================================
+           VARIABLES & BASE STYLES
+           ========================================================================== */
         :root {
             --yellow: #FFD93D;
             --blue: #00BFFF;
@@ -330,6 +333,41 @@
             transform: rotate(-2deg);
             opacity: 0;
             animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.8s, floatSimple 4s ease-in-out infinite alternate 1.3s;
+        }
+
+        /* Hero Image Panel */
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .hero-image-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-profile-pic {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border: var(--border-thick);
+            box-shadow: 15px 15px 0 var(--black);
+            background-color: var(--white);
+            padding: 15px; /* Creates a comic panel frame effect */
+            transform: rotate(4deg);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+        }
+
+        .hero-profile-pic:hover {
+            transform: rotate(-2deg) scale(1.05);
+            box-shadow: 20px 20px 0 var(--black);
         }
 
         /* Origin Story (Grid) */
@@ -717,6 +755,23 @@
             h1 { font-size: 3.5rem; }
             h2 { font-size: 2rem; }
             
+            .hero-container {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding-top: 40px;
+            }
+
+            .hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-profile-pic {
+                max-width: 280px;
+                transform: rotate(2deg);
+            }
+
             .menu-toggle { display: block; }
             
             .nav-links {
@@ -890,7 +945,7 @@
         <div class="action-word red" style="top: 20%; right: 10%;">BUILD!</div>
         <div class="action-word blue" style="bottom: 20%; left: 5%; transform: rotate(10deg);">DEPLOY!</div>
         
-        <div class="container">
+        <div class="container hero-container">
             <div class="hero-content">
                 <h1>HI, I'M GIRISH —<br>THE AI ARCHITECT.</h1>
                 <div class="hero-subtitle">Building intelligent SaaS tools under Lade Stack.</div>
@@ -898,6 +953,11 @@
                 <div class="speech-bubble hero-bubble">
                     Code. Design. Deploy. Repeat. ⚡
                 </div>
+            </div>
+            
+            <div class="hero-image-wrapper reveal delay-1">
+                <!-- Replace the src with your actual image path -->
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Girish&backgroundColor=00BFFF&style=circle" alt="Girish Lade" class="hero-profile-pic">
             </div>
         </div>
     </header>
