@@ -1,1 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Girish Lade | The AI Architect</title>
+    
+    <!-- Comic Book Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================================================
+           VARIABLES & BASE STYLES
+           ========================================================================== */
+        :root {
+            --yellow: #FFD93D;
+            --blue: #00BFFF;
+            --purple: #6A0DAD;
+            --black: #111111;
+            --white: #FFFFFF;
+            --red: #FF4747;
+            --green: #00E676;
+            
+            --border-thick: 5px solid var(--black);
+            --border-thin: 3px solid var(--black);
+            --shadow-solid: 8px 8px 0px var(--black);
+            --shadow-solid-hover: 12px 12px 0px var(--black);
+            
+            --font-heading: 'Bangers', cursive;
+            --font-body: 'Comic Neue', cursive;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--yellow);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Halftone pattern */
+            background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='3' cy='3' r='2' fill='%23000000' fill-opacity='0.15'/%3E%3C/svg%3E");
+        }
+
+        h1, h2, h3, h4, .comic-font {
+            font-family: var(--font-heading);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        /* Typography */
+        h1 { 
+            font-size: clamp(3rem, 8vw, 6rem); 
+            color: var(--white); 
+            text-shadow: 4px 4px 0 var(--black), -2px -2px 0 var(--black), 2px -2px 0 var(--black), -2px 2px 0 var(--black), 2px 2px 0 var(--black);
+            opacity: 0;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.2s;
+        }
+        
+        h2 { 
+            font-size: clamp(2.5rem, 5vw, 4rem); 
+            background: var(--black); 
+            color: var(--white); 
+            display: inline-block; 
+            padding: 0.5rem 1.5rem; 
+            transform: rotate(-2deg); 
+            box-shadow: 6px 6px 0 var(--blue); 
+            margin-bottom: 2rem; 
+            border: var(--border-thick); 
+            border-color: var(--white);
+            transition: transform 0.3s;
+        }
+        
+        h2:hover {
+            transform: rotate(2deg) scale(1.05);
+        }
+        
+        h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+        p { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* ==========================================================================
+           LAYOUT & COMPONENTS
+           ========================================================================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        /* The Panel (Core Comic Element) */
+        .panel {
+            background: var(--white);
+            border: var(--border-thick);
+            box-shadow: var(--shadow-solid);
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; /* Fast transition for smooth JS 3D tilt */
+            z-index: 1;
+            transform-style: preserve-3d;
+        }
+
+        /* Fallback hover for mobile */
+        @media (hover: none) {
+            .panel:active {
+                transform: translate(-4px, -4px) scale(1.02);
+                box-shadow: var(--shadow-solid-hover);
+                z-index: 2;
+            }
+        }
+
+        /* Panel Colors */
+        .panel.blue { background-color: var(--blue); color: var(--white); }
+        .panel.purple { background-color: var(--purple); color: var(--white); }
+        .panel.yellow { background-color: var(--yellow); }
+        
+        .panel.blue h3, .panel.purple h3 { color: var(--yellow); text-shadow: 2px 2px 0 var(--black); }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            padding: 0.8rem 2rem;
+            background: var(--red);
+            color: var(--white);
+            border: var(--border-thick);
+            box-shadow: 6px 6px 0 var(--black);
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.1s;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .btn:active {
+            transform: translate(4px, 4px) !important; /* Force override animation translate */
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .btn:hover {
+            animation: comicShake 0.4s infinite;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+        .btn:hover::after { left: 100%; }
+
+        /* Speech Bubbles */
+        .speech-bubble {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 30px;
+            padding: 1.5rem 2rem;
+            position: relative;
+            display: inline-block;
+            box-shadow: var(--shadow-solid);
+            font-weight: bold;
+            font-size: 1.3rem;
+            animation: floatSimple 4s ease-in-out infinite alternate;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 40px;
+            border-width: 25px 25px 0 0;
+            border-style: solid;
+            border-color: var(--black) transparent transparent transparent;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 44px;
+            border-width: 15px 15px 0 0;
+            border-style: solid;
+            border-color: var(--white) transparent transparent transparent;
+        }
+
+        /* Action Words */
+        .action-word {
+            position: absolute;
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            color: var(--yellow);
+            text-shadow: 4px 4px 0 var(--black), -2px -2px 0 var(--black), 2px -2px 0 var(--black), -2px 2px 0 var(--black), 2px 2px 0 var(--black);
+            transform: rotate(-15deg);
+            z-index: 10;
+            pointer-events: none;
+            animation: pulse 2s infinite alternate, float 5s ease-in-out infinite;
+        }
+        
+        .action-word.red { color: var(--red); }
+        .action-word.blue { color: var(--blue); }
+
+        /* Badges */
+        .badge {
+            background: var(--red);
+            color: var(--white);
+            font-family: var(--font-heading);
+            padding: 0.3rem 0.8rem;
+            border: var(--border-thin);
+            font-size: 1.2rem;
+            transform: rotate(5deg);
+            display: inline-block;
+            box-shadow: 3px 3px 0 var(--black);
+            animation: badgeFloat 3s ease-in-out infinite;
+        }
+
+        /* ==========================================================================
+           SPECIFIC SECTIONS
+           ========================================================================== */
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: var(--white);
+            border-bottom: var(--border-thick);
+            z-index: 100;
+            padding: 10px 0;
+            transition: transform 0.3s;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--black);
+            text-shadow: 2px 2px 0 var(--yellow);
+            transition: transform 0.2s;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1) rotate(-2deg);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            border: 2px solid transparent;
+            padding: 5px 10px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            border: 2px solid var(--black);
+            background: var(--yellow);
+            transform: rotate(-3deg) scale(1.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-family: var(--font-heading);
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 5px 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z' fill='%23ffdb4d' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E") var(--yellow);
+            background-size: 40px 40px;
+            animation: bgScrollSlow 20s linear infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            background: var(--black);
+            color: var(--white);
+            display: inline-block;
+            padding: 5px 15px;
+            margin-top: 20px;
+            border: var(--border-thin);
+            border-color: var(--white);
+            transform: rotate(1deg);
+            opacity: 0;
+            animation: slideUp 0.6s ease-out forwards 0.5s;
+        }
+
+        .hero-bubble {
+            margin-top: 40px;
+            transform: rotate(-2deg);
+            opacity: 0;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.8s, floatSimple 4s ease-in-out infinite alternate 1.3s;
+        }
+
+        /* Origin Story (Grid) */
+        .comic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .origin-panel-1 { grid-column: 1 / -1; background: var(--blue); color: white;}
+        .origin-panel-2 { background: var(--purple); color: white; }
+        .origin-panel-3 { background: var(--white); }
+        
+        .origin-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .origin-icon {
+            font-size: 4rem;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .panel:hover .origin-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Power Stack (Skills) */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-category h3 {
+            background: var(--black);
+            color: var(--yellow);
+            display: inline-block;
+            padding: 5px 15px;
+            transform: skew(-10deg);
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .panel:hover .skill-category h3 {
+            transform: skew(-10deg) scale(1.05);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-item {
+            background: var(--white);
+            border: var(--border-thin);
+            padding: 5px 10px;
+            font-weight: bold;
+            box-shadow: 4px 4px 0 var(--black);
+            transition: transform 0.2s, background 0.2s;
+            color: var(--black);
+            cursor: pointer;
+        }
+        
+        .skill-item:hover {
+            background: var(--yellow);
+            animation: comicShake 0.3s infinite;
+        }
+
+        /* Missions */
+        #missions .panel {
+            background: var(--white);
+        }
+        .mission-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 3px dashed var(--black);
+            transition: transform 0.2s;
+        }
+        .mission-item:hover {
+            transform: translateX(10px);
+        }
+        .mission-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .mission-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--blue);
+            border: var(--border-thin);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 3px 3px 0 var(--black);
+            animation: slowPulse 2s infinite alternate;
+        }
+
+        /* Innovation Lab (Projects) */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-img-placeholder {
+            height: 150px;
+            background: repeating-linear-gradient(
+              45deg,
+              var(--yellow),
+              var(--yellow) 10px,
+              var(--black) 10px,
+              var(--black) 20px
+            );
+            background-size: 40px 40px; /* Size needed for smooth repeating animation */
+            border-bottom: var(--border-thick);
+            margin: -2rem -2rem 1.5rem -2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bgScroll 3s linear infinite;
+        }
+        
+        .project-img-placeholder span {
+            background: var(--white);
+            padding: 5px 15px;
+            border: var(--border-thick);
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            transform: rotate(-5deg);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+        
+        .project-card:hover .project-img-placeholder span {
+            transform: rotate(5deg) scale(1.2);
+        }
+
+        .project-card h3 {
+            font-size: 1.6rem;
+        }
+        
+        .project-card p {
+            flex-grow: 1;
+        }
+
+        .project-card .btn {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            align-self: flex-start;
+        }
+
+        /* Interests */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .interest-item {
+            background: var(--white);
+            border: var(--border-thick);
+            padding: 20px;
+            border-radius: 50%;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-solid);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .interest-item:hover {
+            transform: scale(1.15) translateY(-10px);
+            background: var(--blue);
+            color: var(--white);
+            box-shadow: 0 15px 0 var(--black);
+        }
+
+        .interest-item i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-style: normal;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .interest-item:hover i {
+            transform: rotate(360deg) scale(1.2);
+        }
+
+        .interest-item span {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            line-height: 1.2;
+        }
+
+        /* CTA */
+        #cta {
+            text-align: center;
+            background: var(--purple);
+            border-top: var(--border-thick);
+            border-bottom: var(--border-thick);
+            padding: 80px 20px;
+            background-image: radial-gradient(var(--black) 15%, transparent 16%), radial-gradient(var(--black) 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        .cta-banner {
+            background: var(--yellow);
+            border: var(--border-thick);
+            padding: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 15px 15px 0 var(--black);
+            transform: rotate(-1deg);
+            transition: transform 0.3s;
+        }
+        
+        .cta-banner:hover {
+            transform: rotate(1deg) scale(1.02);
+        }
+
+        .cta-banner h2 {
+            background: none;
+            color: var(--black);
+            box-shadow: none;
+            border: none;
+            margin-bottom: 1rem;
+            transform: none;
+        }
+
+        .cta-banner p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 20px;
+            font-family: var(--font-heading);
+            letter-spacing: 1px;
+        }
+
+        /* ==========================================================================
+           KEYFRAME ANIMATIONS
+           ========================================================================== */
+        
+        @keyframes pulse {
+            0% { transform: scale(1) rotate(-15deg); }
+            100% { transform: scale(1.1) rotate(-10deg); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5) translateY(50px); opacity: 0; }
+            80% { transform: scale(1.1) translateY(-10px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(30px) rotate(1deg); opacity: 0; }
+            100% { transform: translateY(0) rotate(1deg); opacity: 1; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(-15deg); }
+            50% { transform: translateY(-15px) rotate(-12deg); }
+            100% { transform: translateY(0px) rotate(-15deg); }
+        }
+
+        @keyframes floatSimple {
+            0% { transform: translateY(0px) rotate(-2deg); }
+            100% { transform: translateY(-8px) rotate(-2deg); }
+        }
+
+        @keyframes badgeFloat {
+            0% { transform: translateY(0px) rotate(5deg); }
+            50% { transform: translateY(-3px) rotate(8deg); }
+            100% { transform: translateY(0px) rotate(5deg); }
+        }
+
+        @keyframes slowPulse {
+            0% { transform: scale(1); box-shadow: 3px 3px 0 var(--black); }
+            100% { transform: scale(1.05); box-shadow: 6px 6px 0 var(--black); }
+        }
+
+        @keyframes bgScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+        
+        @keyframes bgScrollSlow {
+            0% { background-position: 0 0; }
+            100% { background-position: -40px -40px; }
+        }
+
+        @keyframes comicShake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* Scroll Reveal Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        /* Dynamic Click Bursts */
+        .click-burst {
+            position: fixed;
+            pointer-events: none;
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: var(--red);
+            text-shadow: 3px 3px 0 var(--black), -1px -1px 0 var(--black), 1px -1px 0 var(--black), -1px 1px 0 var(--black), 1px 1px 0 var(--black);
+            z-index: 9999;
+            animation: popFade 0.8s forwards ease-out;
+        }
+
+        @keyframes popFade {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(10deg); opacity: 1; }
+            100% { transform: scale(2) rotate(20deg); opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2rem; }
+            
+            .menu-toggle { display: block; }
+            
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--white);
+                flex-direction: column;
+                border-bottom: var(--border-thick);
+                display: none;
+                padding: 10px 0;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                display: block;
+                text-align: center;
+                padding: 15px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .origin-panel-1, .origin-panel-2, .origin-panel-3 {
+                grid-column: span 1;
+            }
+            
+            .action-word { display: none; } /* Hide floating words on mobile to save space */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">LADE STACK</div>
+            <button class="menu-toggle" id="mobile-menu-btn">MENU ▼</button>
+            <div class="nav-links" id="nav-links">
+                <a href="#origin">Origin</a>
+                <a href="#skills">Powers</a>
+                <a href="#missions">Missions</a>
+                <a href="#projects">Lab</a>
+                <a href="#cta">Connect</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="hero">
+        <div class="action-word red" style="top: 20%; right: 10%;">BUILD!</div>
+        <div class="action-word blue" style="bottom: 20%; left: 5%; transform: rotate(10deg);">DEPLOY!</div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <h1>HI, I'M GIRISH —<br>THE AI ARCHITECT.</h1>
+                <div class="hero-subtitle">Building intelligent SaaS tools under Lade Stack.</div>
+                <br>
+                <div class="speech-bubble hero-bubble">
+                    Code. Design. Deploy. Repeat. ⚡
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Origin Story Panel -->
+    <section id="origin">
+        <div class="container">
+            <h2 class="reveal">THE ORIGIN STORY</h2>
+            
+            <div class="comic-grid">
+                <div class="panel origin-panel-1 reveal">
+                    <div class="origin-content">
+                        <div class="origin-icon">🇮🇳</div>
+                        <div>
+                            <h3>Base of Operations</h3>
+                            <p>Operating out of India, engineering global solutions.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel origin-panel-2 reveal delay-1">
+                    <div class="origin-content">
+                        <div class="origin-icon">🦸‍♂️</div>
+                        <div>
+                            <h3>The Identity</h3>
+                            <p>UI/UX Developer, Engineer, and Founder of Lade Stack.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel origin-panel-3 reveal delay-2">
+                    <div class="origin-content">
+                        <div class="origin-icon">🧠</div>
+                        <div>
+                            <h3>The Mutation</h3>
+                            <p>Started as a curious coder. Mutated by Generative AI. Now building entire AI ecosystems that empower developers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Panel -->
+    <section id="skills">
+        <div class="action-word" style="top: 50px; right: 5%; color: var(--purple);">ZAP!</div>
+        <div class="container">
+            <h2 class="reveal">POWER STACK</h2>
+            
+            <div class="skills-grid">
+                <!-- Frontend -->
+                <div class="panel reveal">
+                    <div class="skill-category">
+                        <h3>FRONTEND VISUALS</h3>
+                        <div class="skill-list">
+                            <span class="skill-item">HTML5</span>
+                            <span class="skill-item">CSS3</span>
+                            <span class="skill-item">JavaScript</span>
+                            <span class="skill-item">TypeScript</span>
+                            <span class="skill-item">React</span>
+                            <span class="skill-item">Flutter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backend -->
+                <div class="panel yellow reveal delay-1">
+                    <div class="skill-category">
+                        <h3>BACKEND LOGIC</h3>
+                        <div class="skill-list">
+                            <span class="skill-item">Node.js</span>
+                            <span class="skill-item">MongoDB</span>
+                            <span class="skill-item">MySQL</span>
+                            <span class="skill-item">Oracle</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cloud -->
+                <div class="panel blue reveal delay-2">
+                    <div class="skill-category">
+                        <h3>CLOUD & DEVOPS</h3>
+                        <div class="skill-list">
+                            <span class="skill-item">AWS</span>
+                            <span class="skill-item">Google Cloud</span>
+                            <span class="skill-item">Docker</span>
+                            <span class="skill-item">Git</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design -->
+                <div class="panel purple reveal delay-3">
+                    <div class="skill-category">
+                        <h3>CREATIVE ARSENAL</h3>
+                        <div class="skill-list">
+                            <span class="skill-item">Figma</span>
+                            <span class="skill-item">Illustrator</span>
+                            <span class="skill-item">Photoshop</span>
+                            <span class="skill-item">Blender</span>
+                            <span class="skill-item">Framer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Current Missions -->
+    <section id="missions">
+        <div class="container">
+            <h2 class="reveal">CURRENT MISSIONS 🚀</h2>
+            
+            <div class="panel reveal">
+                <div class="mission-item">
+                    <div class="mission-icon">🤖</div>
+                    <div>
+                        <h3>Building AI-powered SaaS tools <span class="badge">ACTIVE</span></h3>
+                        <p>Injecting artificial intelligence into everyday developer workflows.</p>
+                    </div>
+                </div>
+                
+                <div class="mission-item">
+                    <div class="mission-icon">☁️</div>
+                    <div>
+                        <h3>Cloud-based file sharing platform</h3>
+                        <p>Secure, fast, and scalable storage solutions under Lade Stack.</p>
+                    </div>
+                </div>
+                
+                <div class="mission-item">
+                    <div class="mission-icon">⚡</div>
+                    <div>
+                        <h3>Developer productivity tools <span class="badge" style="background:var(--blue)">NEW!</span></h3>
+                        <p>Crafting editors, API testers, and workspaces to speed up dev cycles.</p>
+                    </div>
+                </div>
+                
+                <div class="mission-item">
+                    <div class="mission-icon">🕵️</div>
+                    <div>
+                        <h3>AI Agents & Automation</h3>
+                        <p>Experimenting with autonomous systems that do the heavy lifting.</p>
+                    </div>
+                </div>
+                
+                <div class="mission-item">
+                    <div class="mission-icon">📱</div>
+                    <div>
+                        <h3>Learning Kotlin</h3>
+                        <p>Expanding the mobile development arsenal beyond cross-platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="action-word red" style="top: 100px; left: -20px; transform: rotate(25deg);">LAUNCH!</div>
+        <div class="container">
+            <h2 class="reveal">INNOVATION LAB</h2>
+            
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="panel project-card reveal">
+                    <div class="project-img-placeholder">
+                        <span>AI EDITOR</span>
+                    </div>
+                    <h3>AI-Powered Code Editor</h3>
+                    <p>A lightweight, browser-based code editor built with HTML/CSS/JS, supercharged with AI assistance.</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="panel project-card reveal delay-1">
+                    <div class="project-img-placeholder" style="background: repeating-linear-gradient(-45deg, var(--blue), var(--blue) 10px, var(--white) 10px, var(--white) 20px); background-size: 40px 40px;">
+                        <span>CLOUD SHARE</span>
+                    </div>
+                    <h3>Cloud File Platform</h3>
+                    <p>Online file sharing ecosystem prioritizing security and seamless UI.</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="panel project-card reveal delay-2">
+                    <div class="project-img-placeholder" style="background: repeating-linear-gradient(45deg, var(--purple), var(--purple) 10px, var(--black) 10px, var(--black) 20px); background-size: 40px 40px;">
+                        <span style="color:var(--black)">API TESTER</span>
+                    </div>
+                    <h3>API Testing Hub</h3>
+                    <p>A fast, clean interface for developers to test and document API endpoints on the fly.</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="panel project-card reveal">
+                    <div class="project-img-placeholder" style="background: repeating-radial-gradient(var(--yellow) 0, var(--yellow) 10px, var(--red) 10px, var(--red) 20px); background-size: 40px 40px;">
+                        <span>LOTION AI</span>
+                    </div>
+                    <h3>Lotion AI</h3>
+                    <p>A powerful Notion alternative integrated tightly with generative text capabilities.</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="panel project-card reveal delay-1">
+                    <div class="project-img-placeholder" style="background: repeating-linear-gradient(0deg, var(--green), var(--green) 10px, var(--black) 10px, var(--black) 20px); background-size: 40px 40px;">
+                        <span style="color:var(--black)">WORKSPACE</span>
+                    </div>
+                    <h3>All-in-One Workspace</h3>
+                    <p>Combines docs writing, dashboards, and invoice creation into a single productivity suite.</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+                
+                 <!-- Project 6 -->
+                 <div class="panel project-card reveal delay-2">
+                    <div class="project-img-placeholder" style="background: repeating-linear-gradient(90deg, var(--white), var(--white) 10px, var(--black) 10px, var(--black) 20px); background-size: 40px 40px;">
+                        <span>WRITER BOT</span>
+                    </div>
+                    <h3>Content Writer Tool</h3>
+                    <p>Generative AI tool optimized for creating high-converting copy and technical documentation.</p>
+                    <a href="#" class="btn">View Project</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interests -->
+    <section id="interests">
+        <div class="container">
+            <h2 class="reveal">BEYOND CODE</h2>
+            
+            <div class="interests-grid">
+                <div class="interest-item reveal">
+                    <i>🧠</i>
+                    <span>AI Innovation</span>
+                </div>
+                <div class="interest-item reveal delay-1">
+                    <i>🛠️</i>
+                    <span>SaaS Tools</span>
+                </div>
+                <div class="interest-item reveal delay-2">
+                    <i>🎮</i>
+                    <span>Game Dev (Unity)</span>
+                </div>
+                <div class="interest-item reveal delay-3">
+                    <i>🧊</i>
+                    <span>3D Modeling</span>
+                </div>
+                <div class="interest-item reveal">
+                    <i>🍥</i>
+                    <span>Anime (Naruto)</span>
+                </div>
+                <div class="interest-item reveal delay-1">
+                    <i>⛺</i>
+                    <span>Survival Games</span>
+                </div>
+                <div class="interest-item reveal delay-2">
+                    <i>🎨</i>
+                    <span>Terracotta Art</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call To Action -->
+    <section id="cta">
+        <div class="container">
+            <div class="cta-banner reveal">
+                <h2>LET’S BUILD THE FUTURE.</h2>
+                <p>Have an epic idea? Need an AI architect to assemble your SaaS vision?</p>
+                <a href="mailto:hello@ladestack.com" class="btn">CONNECT WITH GIRISH</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Girish Lade / Lade Stack. Hand-coded with HTML, CSS, & Vanilla JS. NO FRAMEWORKS ALLOWED! 💥</p>
+    </footer>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Mobile Menu Toggle
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
+
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                if(navLinks.classList.contains('active')) {
+                    menuBtn.innerText = 'CLOSE ▲';
+                } else {
+                    menuBtn.innerText = 'MENU ▼';
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    menuBtn.innerText = 'MENU ▼';
+                });
+            });
+
+            // 2. Scroll Reveal Animation
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+
+            // Navbar hide/show on scroll
+            let lastScroll = 0;
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll <= 0) {
+                    navbar.style.transform = "translateY(0)";
+                    return;
+                }
+                if (currentScroll > lastScroll && !navLinks.classList.contains('active')) {
+                    navbar.style.transform = "translateY(-100%)";
+                } else {
+                    navbar.style.transform = "translateY(0)";
+                }
+                lastScroll = currentScroll;
+            });
+
+            // 3. Comic Book Click Bursts
+            const burstWords = ["BAM!", "POW!", "ZAP!", "BOOM!", "SMASH!", "WHAM!"];
+            const colors = ["#FF4747", "#00BFFF", "#FFD93D", "#6A0DAD"];
+
+            document.body.addEventListener('click', function(e) {
+                if(e.target.closest('a') || e.target.closest('button')) return;
+
+                const burst = document.createElement('div');
+                burst.className = 'click-burst';
+                
+                const word = burstWords[Math.floor(Math.random() * burstWords.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                burst.innerText = word;
+                burst.style.color = color;
+                
+                burst.style.left = (e.clientX - 50) + 'px';
+                burst.style.top = (e.clientY - 30) + 'px';
+                
+                document.body.appendChild(burst);
+
+                setTimeout(() => {
+                    burst.remove();
+                }, 800);
+            });
+
+            // 4. Interactive 3D Panel Tilt (Desktop only)
+            const panels = document.querySelectorAll('.panel');
+            
+            panels.forEach(panel => {
+                panel.addEventListener('mousemove', (e) => {
+                    // Disable 3D effect on mobile devices
+                    if(window.innerWidth <= 768) return; 
+                    
+                    const rect = panel.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Calculate rotation (max 6 degrees)
+                    const rotateX = ((y - centerY) / centerY) * -6; 
+                    const rotateY = ((x - centerX) / centerX) * 6;  
+                    
+                    panel.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02) translate(-4px, -4px)`;
+                    panel.style.boxShadow = '14px 14px 0px var(--black)';
+                    panel.style.zIndex = '5';
+                });
+                
+                panel.addEventListener('mouseleave', () => {
+                    if(window.innerWidth <= 768) return;
+                    
+                    // Reset to default
+                    panel.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1) translate(0, 0)`;
+                    panel.style.boxShadow = 'var(--shadow-solid)';
+                    panel.style.zIndex = '1';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
