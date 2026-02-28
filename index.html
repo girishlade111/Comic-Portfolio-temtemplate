@@ -46,6 +46,12 @@
             overflow-x: hidden;
             /* Halftone pattern */
             background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='3' cy='3' r='2' fill='%23000000' fill-opacity='0.15'/%3E%3C/svg%3E");
+            /* Comic Custom Cursor */
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23FFD93D' stroke='%23111111' stroke-width='3'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%23FF4747'/%3E%3C/svg%3E") 12 12, auto;
+        }
+
+        a, button, .btn, .skill-item, .panel {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 0l3 9 9 3-9 3-3 9-3-9-9-3 9-3z' fill='%2300BFFF' stroke='%23111111' stroke-width='2'/%3E%3C/svg%3E") 12 12, pointer !important;
         }
 
         h1, h2, h3, h4, .comic-font {
@@ -112,6 +118,28 @@
             transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; /* Fast transition for smooth JS 3D tilt */
             z-index: 1;
             transform-style: preserve-3d;
+            overflow: hidden;
+        }
+
+        /* Halftone print texture on hover */
+        .panel::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23000000' fill-opacity='0.3'/%3E%3C/svg%3E");
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .panel:hover::after {
+            opacity: 1;
+        }
+
+        .panel > * {
+            position: relative;
+            z-index: 1; /* Keep content above halftone */
         }
 
         /* Fallback hover for mobile */
@@ -298,15 +326,43 @@
             cursor: pointer;
         }
 
+        /* Comic Section Divider */
+        .comic-divider {
+            height: 20px;
+            background-color: var(--white);
+            background-image: linear-gradient(45deg, var(--black) 25%, transparent 25%, transparent 75%, var(--black) 75%, var(--black)),
+                              linear-gradient(45deg, var(--black) 25%, transparent 25%, transparent 75%, var(--black) 75%, var(--black));
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            border-top: var(--border-thick);
+            border-bottom: var(--border-thick);
+            position: relative;
+            z-index: 50;
+            transform: rotate(-1deg) scale(1.05);
+            margin: -10px 0;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.2);
+        }
+
         /* Hero Section */
         #hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             padding-top: 80px;
+            position: relative;
+            overflow: hidden; /* Contains the sunburst */
             background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z' fill='%23ffdb4d' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E") var(--yellow);
             background-size: 40px 40px;
             animation: bgScrollSlow 20s linear infinite;
+        }
+
+        .hero-bg-sunburst {
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: repeating-conic-gradient(transparent 0 15deg, rgba(255, 193, 7, 0.4) 15deg 30deg);
+            animation: rotateSunburst 60s linear infinite;
+            z-index: 0;
+            pointer-events: none;
         }
 
         .hero-content {
@@ -773,6 +829,11 @@
             100% { background-position: -40px -40px; }
         }
 
+        @keyframes rotateSunburst {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @keyframes comicShake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -787,6 +848,7 @@
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
 
+        /* Scroll Reveal Classes */
         .reveal {
             opacity: 0;
             transform: translateY(50px) scale(0.95);
@@ -820,6 +882,7 @@
             100% { transform: scale(2) rotate(20deg); opacity: 0; }
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
             h1 { font-size: 3.5rem; }
             h2 { font-size: 2rem; }
@@ -1057,6 +1120,7 @@
 
     <!-- Hero Section -->
     <header id="hero">
+        <div class="hero-bg-sunburst"></div>
         <div class="action-word red" style="top: 20%; right: 10%;">BUILD!</div>
         <div class="action-word blue" style="bottom: 20%; left: 5%; transform: rotate(10deg);">DEPLOY!</div>
         
@@ -1121,6 +1185,8 @@
             </div>
         </div>
     </section>
+
+    <div class="comic-divider"></div>
 
     <!-- Skills Panel -->
     <section id="skills">
@@ -1187,64 +1253,7 @@
         </div>
     </section>
 
-    <!-- Current Missions -->
-    <section id="missions">
-        <div class="container">
-            <h2 class="reveal">CURRENT MISSIONS 🚀</h2>
-            
-            <div class="panel reveal">
-                <div class="mission-item">
-                    <div class="mission-icon">
-                        <svg class="comic-icon"><use href="#icon-robot"></use></svg>
-                    </div>
-                    <div>
-                        <h3>Building AI-powered SaaS tools <span class="badge">ACTIVE</span></h3>
-                        <p>Injecting artificial intelligence into everyday developer workflows.</p>
-                    </div>
-                </div>
-                
-                <div class="mission-item">
-                    <div class="mission-icon">
-                        <svg class="comic-icon"><use href="#icon-cloud"></use></svg>
-                    </div>
-                    <div>
-                        <h3>Cloud-based file sharing platform</h3>
-                        <p>Secure, fast, and scalable storage solutions under Lade Stack.</p>
-                    </div>
-                </div>
-                
-                <div class="mission-item">
-                    <div class="mission-icon">
-                        <svg class="comic-icon"><use href="#icon-lightning"></use></svg>
-                    </div>
-                    <div>
-                        <h3>Developer productivity tools <span class="badge" style="background:var(--blue)">NEW!</span></h3>
-                        <p>Crafting editors, API testers, and workspaces to speed up dev cycles.</p>
-                    </div>
-                </div>
-                
-                <div class="mission-item">
-                    <div class="mission-icon">
-                        <svg class="comic-icon"><use href="#icon-agent"></use></svg>
-                    </div>
-                    <div>
-                        <h3>AI Agents & Automation</h3>
-                        <p>Experimenting with autonomous systems that do the heavy lifting.</p>
-                    </div>
-                </div>
-                
-                <div class="mission-item">
-                    <div class="mission-icon">
-                        <svg class="comic-icon"><use href="#icon-phone"></use></svg>
-                    </div>
-                    <div>
-                        <h3>Learning Kotlin</h3>
-                        <p>Expanding the mobile development arsenal beyond cross-platform.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="comic-divider" style="transform: rotate(1.5deg) scale(1.05); background-color: var(--blue);"></div>
 
     <!-- Projects Section -->
     <section id="projects">
@@ -1315,6 +1324,8 @@
             </div>
         </div>
     </section>
+
+    <div class="comic-divider" style="transform: rotate(-2deg) scale(1.05); background-color: var(--red);"></div>
 
     <!-- Interests -->
     <section id="interests">
@@ -1422,12 +1433,33 @@
                 rootMargin: "0px 0px -50px 0px"
             };
 
+            const scrollBurstWords = ["EPIC!", "WOW!", "BAM!", "BOOM!", "RAD!"];
+            const burstColors = ["#FF4747", "#00BFFF", "#FFD93D", "#6A0DAD"];
+
             const revealOnScroll = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(entry => {
                     if (!entry.isIntersecting) {
                         return;
                     } else {
                         entry.target.classList.add('active');
+                        
+                        // Spawn random scroll burst effect (30% chance)
+                        if (Math.random() > 0.7) {
+                            const burst = document.createElement('div');
+                            burst.className = 'click-burst';
+                            burst.innerText = scrollBurstWords[Math.floor(Math.random() * scrollBurstWords.length)];
+                            burst.style.color = burstColors[Math.floor(Math.random() * burstColors.length)];
+                            
+                            const rect = entry.target.getBoundingClientRect();
+                            burst.style.position = 'absolute';
+                            burst.style.left = (Math.random() * 80 + 10) + '%';
+                            burst.style.top = (rect.top + window.scrollY - 30) + 'px';
+                            burst.style.zIndex = '999';
+                            
+                            document.body.appendChild(burst);
+                            setTimeout(() => burst.remove(), 800);
+                        }
+
                         observer.unobserve(entry.target); 
                     }
                 });
