@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Girish Lade | The AI Architect</title>
     
+    <!-- Comic Book Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
     <style>
+        /* ==========================================================================
+           VARIABLES & BASE STYLES
+           ========================================================================== */
         :root {
             --yellow: #FFD93D;
             --blue: #00BFFF;
@@ -51,6 +55,7 @@
             line-height: 1.1;
         }
 
+        /* Typography */
         h1 { 
             font-size: clamp(3rem, 8vw, 6rem); 
             color: var(--white); 
@@ -83,6 +88,9 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
+        /* ==========================================================================
+           LAYOUT & COMPONENTS
+           ========================================================================== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -141,7 +149,7 @@
         }
 
         .btn:active {
-            transform: translate(4px, 4px) !important; 
+            transform: translate(4px, 4px) !important; /* Force override animation translate */
             box-shadow: 2px 2px 0 var(--black);
         }
 
