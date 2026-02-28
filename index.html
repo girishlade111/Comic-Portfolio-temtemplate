@@ -1135,8 +1135,41 @@
             </div>
             
             <div class="hero-image-wrapper reveal delay-1">
-                <!-- Replace the src with your actual image path -->
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=AIArchitect&backgroundColor=FFD93D&accessories=prescription02&top=shortHairTheCaesar" alt="Girish Lade" class="hero-profile-pic">
+                <!-- Custom Comic SVG Avatar (No external links!) -->
+                <svg class="hero-profile-pic" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Base background -->
+                    <rect width="200" height="200" fill="var(--yellow)" />
+
+                    <!-- Shoulders / Hoodie -->
+                    <path d="M 10 200 C 10 120, 190 120, 190 200 Z" fill="var(--purple)" stroke="var(--black)" stroke-width="10" stroke-linejoin="round"/>
+                    
+                    <!-- Hoodie Strings -->
+                    <path d="M 70 150 L 70 190 M 130 150 L 130 190" stroke="var(--black)" stroke-width="8" stroke-linecap="round"/>
+
+                    <!-- Neck -->
+                    <path d="M 75 120 L 75 140 L 125 140 L 125 120 Z" fill="var(--white)" stroke="var(--black)" stroke-width="10" stroke-linejoin="round"/>
+
+                    <!-- Face / Head -->
+                    <path d="M 50 120 C 50 160, 150 160, 150 120 L 150 60 C 150 30, 50 30, 50 60 Z" fill="var(--white)" stroke="var(--black)" stroke-width="10" stroke-linejoin="round"/>
+
+                    <!-- Spiky Anime Hair -->
+                    <path d="M 30 70 L 60 40 L 55 10 L 90 30 L 110 5 L 130 30 L 160 15 L 145 50 L 170 80 L 145 85 Z" fill="var(--blue)" stroke="var(--black)" stroke-width="10" stroke-linejoin="round"/>
+
+                    <!-- Cyber Glasses -->
+                    <rect x="55" y="70" width="40" height="25" rx="5" fill="var(--black)"/>
+                    <rect x="105" y="70" width="40" height="25" rx="5" fill="var(--black)"/>
+                    <line x1="95" y1="82.5" x2="105" y2="82.5" stroke="var(--black)" stroke-width="8"/>
+                    
+                    <!-- Glasses Glint -->
+                    <line x1="65" y1="78" x2="85" y2="78" stroke="var(--green)" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="115" y1="78" x2="135" y2="78" stroke="var(--green)" stroke-width="6" stroke-linecap="round"/>
+
+                    <!-- Confident Smirk -->
+                    <path d="M 85 115 Q 105 130 125 110" fill="none" stroke="var(--black)" stroke-width="8" stroke-linecap="round"/>
+
+                    <!-- AI Symbol on Hoodie -->
+                    <path d="M 100 160 L 85 175 L 100 175 L 90 195 L 120 165 L 105 165 Z" fill="var(--yellow)" stroke="var(--black)" stroke-width="6" stroke-linejoin="round"/>
+                </svg>
             </div>
         </div>
     </header>
