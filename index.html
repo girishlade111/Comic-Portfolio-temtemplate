@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Girish Lade | The AI Architect</title>
     
+    <!-- Comic Book Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     
     <style>
+        /* ==========================================================================
+           VARIABLES & BASE STYLES
+           ========================================================================== */
         :root {
             --yellow: #FFD93D;
             --blue: #00BFFF;
@@ -40,6 +44,7 @@
             color: var(--black);
             line-height: 1.6;
             overflow-x: hidden;
+            /* Halftone pattern */
             background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='3' cy='3' r='2' fill='%23000000' fill-opacity='0.15'/%3E%3C/svg%3E");
         }
 
@@ -50,6 +55,7 @@
             line-height: 1.1;
         }
 
+        /* Typography */
         h1 { 
             font-size: clamp(3rem, 8vw, 6rem); 
             color: var(--white); 
@@ -634,6 +640,77 @@
             margin-bottom: 2rem;
         }
 
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 65px;
+            height: 65px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 15px;
+            box-shadow: 6px 6px 0 var(--black);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            text-decoration: none;
+            color: var(--black);
+            position: relative;
+        }
+
+        .social-btn:hover {
+            transform: translate(-4px, -4px) scale(1.1);
+            box-shadow: 10px 10px 0 var(--black);
+            animation: comicShake 0.4s infinite;
+            z-index: 10;
+        }
+
+        /* Hover Colors */
+        .social-btn.instagram:hover { background: var(--purple); }
+        .social-btn.linkedin:hover { background: var(--blue); }
+        .social-btn.github:hover { background: var(--black); }
+        .social-btn.codepen:hover { background: var(--green); }
+        .social-btn.email:hover { background: var(--red); }
+        .social-btn.website:hover { background: var(--yellow); }
+
+        .social-btn .comic-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Social Tooltip */
+        .social-btn::before {
+            content: attr(aria-label);
+            position: absolute;
+            bottom: -45px;
+            background: var(--black);
+            color: var(--yellow);
+            font-family: var(--font-heading);
+            padding: 5px 12px;
+            font-size: 1.2rem;
+            border: var(--border-thin);
+            border-color: var(--white);
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            pointer-events: none;
+            box-shadow: 4px 4px 0 var(--blue);
+            z-index: 20;
+        }
+
+        .social-btn:hover::before {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Footer */
         footer {
             background: var(--black);
@@ -915,6 +992,52 @@
                 <circle cx="35" cy="45" r="5" fill="var(--red)" stroke="var(--black)" stroke-width="3"/>
                 <circle cx="45" cy="65" r="6" fill="var(--blue)" stroke="var(--black)" stroke-width="3"/>
                 <circle cx="60" cy="40" r="5" fill="var(--green)" stroke="var(--black)" stroke-width="3"/>
+            </symbol>
+            
+            <!-- Instagram -->
+            <symbol id="icon-instagram" viewBox="0 0 100 100">
+                <rect x="15" y="15" width="70" height="70" rx="15" fill="var(--white)" stroke="var(--black)" stroke-width="6"/>
+                <circle cx="50" cy="50" r="16" fill="none" stroke="var(--black)" stroke-width="6"/>
+                <circle cx="70" cy="30" r="4" fill="var(--black)"/>
+            </symbol>
+
+            <!-- LinkedIn -->
+            <symbol id="icon-linkedin" viewBox="0 0 100 100">
+                <rect x="15" y="15" width="70" height="70" rx="12" fill="var(--white)" stroke="var(--black)" stroke-width="6"/>
+                <circle cx="33" cy="35" r="7" fill="var(--black)"/>
+                <rect x="26" y="48" width="14" height="30" rx="2" fill="var(--black)"/>
+                <path d="M 48 78 V 55 C 48 45 70 45 70 55 V 78 H 56 V 60 C 56 55 48 55 48 60 Z" fill="var(--black)" stroke="var(--black)" stroke-width="2" stroke-linejoin="round"/>
+            </symbol>
+
+            <!-- GitHub -->
+            <symbol id="icon-github" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="var(--white)" stroke="var(--black)" stroke-width="6"/>
+                <path d="M 30 25 L 35 40 L 65 40 L 70 25 L 85 50 C 85 80 50 90 50 90 C 50 90 15 80 15 50 Z" fill="var(--black)" stroke="var(--black)" stroke-width="6" stroke-linejoin="round"/>
+                <path d="M 35 60 Q 50 75 65 60" fill="none" stroke="var(--white)" stroke-width="6" stroke-linecap="round"/>
+                <circle cx="35" cy="50" r="5" fill="var(--white)"/>
+                <circle cx="65" cy="50" r="5" fill="var(--white)"/>
+            </symbol>
+
+            <!-- CodePen -->
+            <symbol id="icon-codepen" viewBox="0 0 100 100">
+                <path d="M 50 15 L 85 35 L 85 65 L 50 85 L 15 65 L 15 35 Z" fill="var(--white)" stroke="var(--black)" stroke-width="6" stroke-linejoin="round"/>
+                <path d="M 15 35 L 50 55 L 85 35 M 50 15 L 50 55 M 15 65 L 50 45 L 85 65 M 50 85 L 50 45" fill="none" stroke="var(--black)" stroke-width="6" stroke-linejoin="round"/>
+            </symbol>
+
+            <!-- Email -->
+            <symbol id="icon-email" viewBox="0 0 100 100">
+                <rect x="15" y="25" width="70" height="50" rx="5" fill="var(--white)" stroke="var(--black)" stroke-width="6"/>
+                <path d="M 15 25 L 50 55 L 85 25" fill="none" stroke="var(--black)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 15 75 L 40 50 M 85 75 L 60 50" fill="none" stroke="var(--black)" stroke-width="6" stroke-linecap="round"/>
+            </symbol>
+
+            <!-- Website / Globe -->
+            <symbol id="icon-globe" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="var(--white)" stroke="var(--black)" stroke-width="6"/>
+                <ellipse cx="50" cy="50" rx="18" ry="38" fill="none" stroke="var(--black)" stroke-width="6"/>
+                <line x1="12" y1="50" x2="88" y2="50" stroke="var(--black)" stroke-width="6"/>
+                <line x1="20" y1="25" x2="80" y2="25" stroke="var(--black)" stroke-width="6"/>
+                <line x1="20" y1="75" x2="80" y2="75" stroke="var(--black)" stroke-width="6"/>
             </symbol>
         </defs>
     </svg>
@@ -1239,7 +1362,28 @@
             <div class="cta-banner reveal">
                 <h2>LET’S BUILD THE FUTURE.</h2>
                 <p>Have an epic idea? Need an AI architect to assemble your SaaS vision?</p>
-                <a href="mailto:hello@ladestack.com" class="btn">CONNECT WITH GIRISH</a>
+                <a href="mailto:admin@ladestack.in" class="btn">CONNECT WITH GIRISH</a>
+                
+                <div class="social-links">
+                    <a href="https://www.instagram.com/girish_lade_/" target="_blank" class="social-btn instagram" aria-label="Instagram">
+                        <svg class="comic-icon"><use href="#icon-instagram"></use></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/girish-lade-075bba201/" target="_blank" class="social-btn linkedin" aria-label="LinkedIn">
+                        <svg class="comic-icon"><use href="#icon-linkedin"></use></svg>
+                    </a>
+                    <a href="https://github.com/girishlade111" target="_blank" class="social-btn github" aria-label="GitHub">
+                        <svg class="comic-icon"><use href="#icon-github"></use></svg>
+                    </a>
+                    <a href="https://codepen.io/Girish-Lade-the-looper" target="_blank" class="social-btn codepen" aria-label="CodePen">
+                        <svg class="comic-icon"><use href="#icon-codepen"></use></svg>
+                    </a>
+                    <a href="mailto:admin@ladestack.in" class="social-btn email" aria-label="Email">
+                        <svg class="comic-icon"><use href="#icon-email"></use></svg>
+                    </a>
+                    <a href="https://ladestack.in" target="_blank" class="social-btn website" aria-label="Website">
+                        <svg class="comic-icon"><use href="#icon-globe"></use></svg>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
